@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using school_management_api.Models;
 using school_management_api.Models.DTOs;
 using school_management_api.Storage.Context;
@@ -10,6 +11,13 @@ namespace school_management_api.Controllers;
 public class StudentController(DatabaseContext db) : ControllerBase
 {
     private readonly DatabaseContext _db = db;
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<StudentModel>>> GetAllStudents()
+    {
+        return Ok(await _db.Students.ToListAsync());
+    }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
