@@ -1,7 +1,10 @@
-﻿namespace school_management_api.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace school_management_api.Models;
 
 public class CourseModel
 {
+    [Key]
     public Guid Id { get; set; }
     public Guid TeacherId { get; set; }
     public string Name { get; set; } = string.Empty;
