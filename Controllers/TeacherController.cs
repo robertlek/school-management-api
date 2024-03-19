@@ -2,6 +2,7 @@
 using school_management_api.Models.DTOs;
 using school_management_api.Models;
 using school_management_api.Storage.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace school_management_api.Controllers;
 
@@ -10,6 +11,23 @@ namespace school_management_api.Controllers;
 public class TeacherController(DatabaseContext db) : ControllerBase
 {
     private readonly DatabaseContext _db = db;
+
+    [HttpGet("{id:guid}", Name = "GetTeacher")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<TeacherModel>> GetTeacher(Guid id)
+    {
+        TeacherModel? teacher = await _db.Teachers.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (teacher == null)
+        {
+            return BadRequest();
+        }
+        else
+        {
+            return Ok(teacher);
+        }
+    }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

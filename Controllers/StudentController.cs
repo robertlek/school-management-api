@@ -19,6 +19,23 @@ public class StudentController(DatabaseContext db) : ControllerBase
         return Ok(await _db.Students.ToListAsync());
     }
 
+    [HttpGet("{id:guid}", Name = "GetStudent")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<StudentModel>> GetStudent(Guid id)
+    {
+        StudentModel? student = await _db.Students.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (student == null)
+        {
+            return BadRequest();
+        }
+        else
+        {
+            return Ok(student);
+        }
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
