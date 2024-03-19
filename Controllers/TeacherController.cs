@@ -15,13 +15,19 @@ public class TeacherController(DatabaseContext db) : ControllerBase
     [HttpGet("{id:guid}", Name = "GetTeacher")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TeacherModel>> GetTeacher(Guid id)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<TeacherModel>> GetTeacher(Guid? id)
     {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
         TeacherModel? teacher = await _db.Teachers.FirstOrDefaultAsync(x => x.Id == id);
 
         if (teacher == null)
         {
-            return BadRequest();
+            return NotFound();
         }
         else
         {
